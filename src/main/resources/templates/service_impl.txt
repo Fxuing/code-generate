@@ -1,0 +1,39 @@
+package [(${serviceImpl.packageName})].service.impl
+
+
+/**
+ * @Author: code-generate
+ * @Date: [(${daoInfo.time})]
+ * @Description:
+ */
+public class [(${serviceImpl.modelName})]Impl implements [(${serviceImpl.modelName})]Service{
+	@AutoWired
+	[(${serviceImpl.modelName})]Mapper [(${serviceImpl.modelNameLower})]Mapper;
+
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public Long insert([(${serviceImpl.modelName})] [(${serviceImpl.modelNameLower})]){
+		return [(${serviceImpl.modelNameLower})]Mapper.insert([(${serviceImpl.modelNameLower})]);
+	}
+
+	@Override
+	public void update([(${serviceImpl.modelName})] [(${serviceImpl.modelNameLower})]){
+		[(${serviceImpl.modelNameLower})]Mapper.update([(${serviceImpl.modelNameLower})]);
+	}
+
+	@Override
+	public void delete(Long id){
+		[(${serviceImpl.modelNameLower})]Mapper.delete(id);
+	}
+
+	@Override
+	public Paginate search(Paginate paginate){
+		Long count = [(${serviceImpl.modelNameLower})]Mapper.count(paginate);
+		if (count == 0){
+			return paginate;
+		}
+		paginate.setTotal(count);
+		paginate.setData([(${serviceImpl.modelNameLower})]Mapper.search(paginate));
+		return paginate;
+	}
+}

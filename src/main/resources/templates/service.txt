@@ -1,0 +1,25 @@
+package [(${service.packageName})].service;
+
+import com.obanks.common.Paginate;
+
+import java.util.List;
+
+/**
+ * @Author: code-generate
+ * @Date: [(${service.time})]
+ * @Description:
+ */
+public interface [(${service.modelName})]Service{
+    [# th:if="${service.insert}"]
+    Long insert([(${service.modelName})] [(${service.modelNameLower})]);
+    [/]
+    [# th:if="${service.update}"]
+    void update([(${service.modelName})] [(${service.modelNameLower})]);
+    [/]
+    [# th:if="${service.delete}"]
+    void delete(Long id);
+    [/]
+    [# th:if="${service.select}"]
+    Paginate search(Paginate paginate);
+    [/]
+}

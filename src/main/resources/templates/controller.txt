@@ -1,0 +1,32 @@
+package [(${controller.packageName})].controller
+
+
+@RestController
+@RequestMapping("[(${controller.packageName})]")
+public class [(${controller.modelName})]Controller{
+	@Autowired
+	[(${controller.modelName})]Service [(${controller.modelNameLower})]Service;
+
+	@PostMapping("insert")
+	public Object insert([(${controller.modelName})] [(${controller.modelNameLower})]){
+		[(${controller.modelNameLower})]Service.insert([(${controller.modelNameLower})]);
+		return "OK";
+	}
+
+	@PostMapping("update")
+	public Object update([(${controller.modelName})] [(${controller.modelNameLower})]){
+		[(${controller.modelNameLower})]Service.update([(${controller.modelNameLower})]);
+		return "OK";
+	}
+
+	@PostMapping("delete")
+	public Object delete([(${controller.modelName})] [(${controller.modelNameLower})]){
+		[(${controller.modelNameLower})]Service.delete([(${controller.modelNameLower})]);
+		return "OK";
+	}
+
+	@PostMapping("search")
+	public Object search([(${controller.modelName})] [(${controller.modelNameLower})]){
+		return [(${controller.modelNameLower})]Service.search([(${controller.modelNameLower})]);
+	}
+}

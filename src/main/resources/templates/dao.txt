@@ -1,0 +1,29 @@
+package [(${daoInfo.packageName})].mapper;
+
+import com.obanks.common.Paginate;
+import org.springframework.stereotype.Repository;
+
+import java.util.List;
+
+/**
+ * @Author: code-generate
+ * @Date: [(${daoInfo.time})]
+ * @Description:
+ */
+@Repository
+public interface [(${daoInfo.modelName})]Mapper{
+    [# th:if="${daoInfo.insert}"]
+    Long insert([(${daoInfo.modelName})] [(${daoInfo.modelNameLower})]);
+    [/]
+    [# th:if="${daoInfo.update}"]
+    void update([(${daoInfo.modelName})] [(${daoInfo.modelNameLower})]);
+    [/]
+    [# th:if="${daoInfo.delete}"]
+    void delete(Long id);
+    [/]
+    [# th:if="${daoInfo.select}"]
+    Long count(Paginate paginate);
+
+    List<[(${daoInfo.modelName})]> search(Paginate paginate);
+    [/]
+}

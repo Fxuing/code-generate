@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="[(${mapper.namespace})]">
+    [# th:if="${mapper.insert}"]
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
+        INSERT INTO [(${mapper.tableName})]
+        ([# th:each="propertiesInfos,iterStat : ${mapper.propertiesInfos}"]
+            [(${propertiesInfos.columns})][# th:if="${iterStat.last ne true}"],[/]
+        [/])
+        VALUES
+        ([# th:each="properties,iterStat : ${mapper.propertiesInfos}"]
+            #{[(${properties.properties})]}[# th:if="${iterStat.last ne true}"],[/]
+        [/])
+    </insert>
+    [/]
+    [# th:if="${mapper.update}"]
+    <update id = "update">
+        UPDATE [(${mapper.tableName})]
+        <set>[# th:each="propertiesInfos,iterStat : ${mapper.propertiesInfos}"]
+            <if test="[(${propertiesInfos.properties})] != null and [(${propertiesInfos.properties})] != ''">
+            	[(${propertiesInfos.columns})] = #{[(${propertiesInfos.properties})]}[# th:if="${iterStat.last ne true}"],[/]
+            </if>[/]
+        </set>
+        WHERE ID = #{id}
+    </update>
+    [/]
+    [# th:if="${mapper.delete}"]
+    <delete id = "delete">
+    	DELETE FROM [(${mapper.tableName})] WHERE ID = #{id}
+    </delete>
+    [/]
+    [# th:if="${mapper.select}"]
+    <select id = "count" resultType="java.lang.Long">
+    	SELECT COUNT(1) FROM [(${mapper.tableName})]
+    </select>
+
+    <select id = "search" resultType="mapper.namespace">
+    	SELECT [# th:each="properties,iterStat : ${mapper.propertiesInfos}"]
+    		[(${properties.columns})] as [(${properties.properties})][# th:if="${iterStat.last ne true}"],[/]
+    	[/] FROM [(${mapper.tableName})] LIMIT #{startNum},#{recordsPerPage}
+    </select>
+    [/]
+</mapper>
