@@ -1,4 +1,4 @@
-package [(${table.modelName})];
+package [(${table.packageName})];
 
 import lombok.Data;
 

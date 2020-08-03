@@ -1,32 +1,32 @@
-package [(${controller.packageName})].controller
+package [(${classInfo.packageName})].controller;
 
 
 @RestController
-@RequestMapping("[(${controller.packageName})]")
-public class [(${controller.modelName})]Controller{
+@RequestMapping("[(${classInfo.packageName})]")
+public class [(${classInfo.modelName})]Controller{
 	@Autowired
-	[(${controller.modelName})]Service [(${controller.modelNameLower})]Service;
+	[(${classInfo.modelName})]Service [(${classInfo.modelNameLower})]Service;
 
 	@PostMapping("insert")
-	public Object insert([(${controller.modelName})] [(${controller.modelNameLower})]){
-		[(${controller.modelNameLower})]Service.insert([(${controller.modelNameLower})]);
+	public Object insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		[(${classInfo.modelNameLower})]Service.insert([(${classInfo.modelNameLower})]);
 		return "OK";
 	}
 
 	@PostMapping("update")
-	public Object update([(${controller.modelName})] [(${controller.modelNameLower})]){
-		[(${controller.modelNameLower})]Service.update([(${controller.modelNameLower})]);
+	public Object update([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		[(${classInfo.modelNameLower})]Service.update([(${classInfo.modelNameLower})]);
 		return "OK";
 	}
 
 	@PostMapping("delete")
-	public Object delete([(${controller.modelName})] [(${controller.modelNameLower})]){
-		[(${controller.modelNameLower})]Service.delete([(${controller.modelNameLower})]);
+	public Object delete([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		[(${classInfo.modelNameLower})]Service.delete([(${classInfo.modelNameLower})]);
 		return "OK";
 	}
 
 	@PostMapping("search")
-	public Object search([(${controller.modelName})] [(${controller.modelNameLower})]){
-		return [(${controller.modelNameLower})]Service.search([(${controller.modelNameLower})]);
+	public Object search([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		return [(${classInfo.modelNameLower})]Service.search([(${classInfo.modelNameLower})]);
 	}
 }

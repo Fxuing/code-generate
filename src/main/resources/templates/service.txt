@@ -1,4 +1,4 @@
-package [(${service.packageName})].service;
+package [(${classInfo.packageName})].service;
 
 import com.obanks.common.Paginate;
 
@@ -6,20 +6,20 @@ import java.util.List;
 
 /**
  * @Author: code-generate
- * @Date: [(${service.time})]
+ * @Date: [(${classInfo.time})]
  * @Description:
  */
-public interface [(${service.modelName})]Service{
-    [# th:if="${service.insert}"]
-    Long insert([(${service.modelName})] [(${service.modelNameLower})]);
+public interface [(${classInfo.modelName})]Service{
+    [# th:if="${classInfo.insert}"]
+    Long insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]);
     [/]
-    [# th:if="${service.update}"]
-    void update([(${service.modelName})] [(${service.modelNameLower})]);
+    [# th:if="${classInfo.update}"]
+    void update([(${classInfo.modelName})] [(${classInfo.modelNameLower})]);
     [/]
-    [# th:if="${service.delete}"]
+    [# th:if="${classInfo.delete}"]
     void delete(Long id);
     [/]
-    [# th:if="${service.select}"]
+    [# th:if="${classInfo.select}"]
     Paginate search(Paginate paginate);
     [/]
 }

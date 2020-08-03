@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -31,7 +32,7 @@ public class GenerateController {
     }
 
     @GetMapping("show/{tableName}")
-    public Object tableInfo(@PathVariable String tableName, HttpServletResponse response) {
+    public Object tableInfo(@PathVariable String tableName, HttpServletResponse response) throws SQLException {
         generateService.generateModel(tableName);
         generateService.generateDao(tableName);
         generateService.generateMapper(tableName);

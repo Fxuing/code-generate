@@ -4,6 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.thymeleaf.templatemode.TemplateMode;
+import org.thymeleaf.templateresolver.ClassLoaderTemplateResolver;
+import org.thymeleaf.templateresolver.ITemplateResolver;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -14,15 +18,12 @@ import java.io.Writer;
  * @Date: 2020.7.24 16:53
  * @Description:
  */
-@Component
 public class TemplateUtil {
-    private static TemplateEngine engine;
+    private static TemplateEngine engine = getTemplateEngine();
 
-    @Autowired
     public void setEngine(TemplateEngine engine) {
         TemplateUtil.engine = engine;
     }
-    //public static TemplateEngine engine = ApplicationContextHolder.getBean(TemplateEngine.class);
 
     /**
      * 生成文件
@@ -43,5 +44,21 @@ public class TemplateUtil {
     }
     public static void process(String freeTempName, Context context, Writer writer) {
         engine.process(freeTempName, context, writer);
+    }
+
+    public static TemplateEngine getTemplateEngine() {
+        final TemplateEngine templateEngine = new SpringTemplateEngine();
+        // 处理txt的
+        templateEngine.addTemplateResolver(textTemplateResolver());
+        return templateEngine;
+    }
+    private static ITemplateResolver textTemplateResolver() {
+        final ClassLoaderTemplateResolver templateResolver = new ClassLoaderTemplateResolver();
+        templateResolver.setOrder(1);
+        templateResolver.setTemplateMode(TemplateMode.TEXT);
+        templateResolver.setCharacterEncoding("UTF-8");
+        templateResolver.setPrefix("/templates/");
+        templateResolver.setCacheable(false);
+        return templateResolver;
     }
 }

@@ -1,39 +1,39 @@
-package [(${serviceImpl.packageName})].service.impl
+package [(${classInfo.packageName})].service.impl;
 
 
 /**
  * @Author: code-generate
- * @Date: [(${daoInfo.time})]
+ * @Date: [(${classInfo.time})]
  * @Description:
  */
-public class [(${serviceImpl.modelName})]Impl implements [(${serviceImpl.modelName})]Service{
+public class [(${classInfo.modelName})]Impl implements [(${classInfo.modelName})]Service{
 	@AutoWired
-	[(${serviceImpl.modelName})]Mapper [(${serviceImpl.modelNameLower})]Mapper;
+	[(${classInfo.modelName})]Mapper [(${classInfo.modelNameLower})]Mapper;
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
-	public Long insert([(${serviceImpl.modelName})] [(${serviceImpl.modelNameLower})]){
-		return [(${serviceImpl.modelNameLower})]Mapper.insert([(${serviceImpl.modelNameLower})]);
+	public Long insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		return [(${classInfo.modelNameLower})]Mapper.insert([(${classInfo.modelNameLower})]);
 	}
 
 	@Override
-	public void update([(${serviceImpl.modelName})] [(${serviceImpl.modelNameLower})]){
-		[(${serviceImpl.modelNameLower})]Mapper.update([(${serviceImpl.modelNameLower})]);
+	public void update([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		[(${classInfo.modelNameLower})]Mapper.update([(${classInfo.modelNameLower})]);
 	}
 
 	@Override
 	public void delete(Long id){
-		[(${serviceImpl.modelNameLower})]Mapper.delete(id);
+		[(${classInfo.modelNameLower})]Mapper.delete(id);
 	}
 
 	@Override
 	public Paginate search(Paginate paginate){
-		Long count = [(${serviceImpl.modelNameLower})]Mapper.count(paginate);
+		Long count = [(${classInfo.modelNameLower})]Mapper.count(paginate);
 		if (count == 0){
 			return paginate;
 		}
 		paginate.setTotal(count);
-		paginate.setData([(${serviceImpl.modelNameLower})]Mapper.search(paginate));
+		paginate.setData([(${classInfo.modelNameLower})]Mapper.search(paginate));
 		return paginate;
 	}
 }

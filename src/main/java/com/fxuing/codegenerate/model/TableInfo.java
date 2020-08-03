@@ -20,6 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 public class TableInfo {
     private String tableName;
     private String modelName;
+    private String packageName;
     private String time = LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss"));
     private List<Field> fieldList;
 
