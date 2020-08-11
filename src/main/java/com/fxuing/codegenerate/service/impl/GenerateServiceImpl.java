@@ -1,5 +1,6 @@
 package com.fxuing.codegenerate.service.impl;
 
+import com.fxuing.codegenerate.constant.JavaType;
 import com.fxuing.codegenerate.constant.Sql;
 import com.fxuing.codegenerate.constant.Template;
 import com.fxuing.codegenerate.core.config.GenerateConfig;
@@ -32,6 +33,7 @@ public class GenerateServiceImpl implements GenerateService {
     private static final Map<String, String> FILE_TYPE = new HashMap<>();
     private static final Map<String, String> DIR_TYPE = new HashMap<>();
     private static final String TABLE = "table";
+    private static final String IMPORTS = "imports";
     private static final String CLASS_INFO = "classInfo";
     private static final String MAPPER = "mapper";
 
@@ -65,13 +67,14 @@ public class GenerateServiceImpl implements GenerateService {
         tableInfo.setTableName(tableName);
         String modelName = StringSimpleUtil.underlineToHump(tableName);
         tableInfo.setModelName(modelName.substring(0, 1).toUpperCase() + modelName.substring(1));
-        tableInfo.setPackageName(this.config.getPackageName() + "." + tableInfo.getModelName());
+        tableInfo.setPackageName(this.config.getPackageName() + ".entity" );
         List<TableDetail> tableDetail = jdbcTemplate.query(String.format(Sql.QUERY_TABLE_DETAIL, tableName), (resultSet, i) -> TableDetail.getInstance(resultSet));
         List<TableInfo.Field> fieldList = new ArrayList<>();
         tableDetail.forEach(f -> fieldList.add(TableInfo.Field.getInstance(f)));
         tableInfo.setFieldList(fieldList);
         Map<String, Object> param = new HashMap<>(16);
         param.put(TABLE, tableInfo);
+        param.put(IMPORTS, importsPackage(param));
         Context context = new Context(Locale.CHINA);
         context.setVariables(param);
         TemplateUtil.process(Template.MODEL, context, createDir(DIR_TYPE.get(Template.MODEL)) + tableInfo.getModelName() + FILE_TYPE.get(Template.MODEL));
@@ -115,6 +118,13 @@ public class GenerateServiceImpl implements GenerateService {
     @Override
     public void generateController(String tableName) {
         this.exec(tableName, Template.CONTROLLER, createDir(DIR_TYPE.get(Template.CONTROLLER)));
+    }
+
+    private Set<String> importsPackage(Map<String,Object> param){
+        Set<String> res = new HashSet<>();
+        TableInfo tableInfo = (TableInfo) Optional.ofNullable(param.get(TABLE)).orElse(new TableInfo());
+        Optional.ofNullable(tableInfo.getFieldList()).ifPresent(p -> p.forEach(f -> Optional.ofNullable(JavaType.get(f.getJavaType())).ifPresent(res::add)));
+        return res;
     }
 
     private void exec(String tableName, String template, String outputPath) {

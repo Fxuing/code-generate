@@ -1,6 +1,9 @@
 package [(${table.packageName})];
 
 import lombok.Data;
+[# th:each="import : ${imports}"]
+import [(${import})];
+[/]
 
 /**
  * @Author: code-generate
