@@ -5,7 +5,6 @@ import com.fxuing.codegenerate.model.BaseOper;
 import com.fxuing.codegenerate.utils.StringSimpleUtil;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**

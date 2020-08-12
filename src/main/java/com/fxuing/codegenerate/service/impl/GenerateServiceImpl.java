@@ -39,6 +39,10 @@ public class GenerateServiceImpl implements GenerateService {
     private static final String IMPORTS = "imports";
     private static final String CLASS_INFO = "classInfo";
     private static final String MAPPER = "mapper";
+    private static final String SERVICE_FORMAT = "%s.service.%sService";
+    private static final String MAPPER_FORMAT = "%s.mapper.%sMapper";
+    private static final String ENTITY_FORMAT = "%s.entity.%s";
+    private static final String USER_DIR = System.getProperty("user.dir");
 
     static {
         FILE_TYPE.put(Template.MODEL, ".java");
@@ -104,8 +108,8 @@ public class GenerateServiceImpl implements GenerateService {
         Context context = new Context(Locale.CHINA);
         context.setVariables(param);
         modelName = modelName.substring(0, 1).toUpperCase() + modelName.substring(1);
-        mapperInfo.setNamespace(this.config.getPackageName() + ".mapper." + modelName + "Mapper");
-        mapperInfo.setModelName(this.config.getPackageName() + ".entity." + modelName);
+        mapperInfo.setNamespace(String.format(MAPPER_FORMAT, this.config.getPackageName(), modelName));
+        mapperInfo.setModelName(String.format(ENTITY_FORMAT, this.config.getPackageName(), modelName));
         TemplateUtil.process(Template.MAPPER, context, createDir(DIR_TYPE.get(Template.MAPPER)) + modelName + FILE_TYPE.get(Template.MAPPER));
     }
 
@@ -133,28 +137,34 @@ public class GenerateServiceImpl implements GenerateService {
                 TableInfo tableInfo = (TableInfo) Optional.ofNullable(param.get(TABLE)).orElse(new TableInfo());
                 Optional.ofNullable(tableInfo.getFieldList()).ifPresent(p -> p.forEach(f -> Optional.ofNullable(JavaType.get(f.getJavaType())).ifPresent(res::add)));
                 break;
-            //case Template.DAO:
-            //case Template.SERVICE:
-            case Template.SERVICE_IMPL:
-                res.add(classInfo.getPackageName() + ".mapper." + classInfo.getModelName() + "Mapper");
-                res.add(classInfo.getPackageName() + ".service." + classInfo.getModelName() + "Service");
-                res.add(JavaType.get(AUTOWIRED));
+            case Template.DAO:
+                Collections.addAll(res, JavaType.get(REPOSITORY), JavaType.get(PAGINATE), JavaType.get(LIST));
+                break;
+            case Template.SERVICE:
                 res.add(JavaType.get(PAGINATE));
-                res.add(JavaType.get(SERVICE));
-                res.add(JavaType.get(PROPAGATION));
-                res.add(JavaType.get(TRANSACTIONAL));
+                break;
+            case Template.SERVICE_IMPL:
+                Collections.addAll(res,
+                        String.format(MAPPER_FORMAT, classInfo.getPackageName(), classInfo.getModelName()),
+                        String.format(SERVICE_FORMAT,classInfo.getPackageName(),classInfo.getModelName()),
+                        JavaType.get(AUTOWIRED), JavaType.get(PAGINATE), JavaType.get(SERVICE),
+                        JavaType.get(PROPAGATION), JavaType.get(TRANSACTIONAL)
+                        );
                 break;
             case Template.CONTROLLER:
-                res.add(classInfo.getPackageName() + ".service." + classInfo.getModelName() + "Service");
-                res.add(JavaType.get(PAGINATE));
-                res.add(JavaType.get(AUTOWIRED));
-                res.add(JavaType.get(POST_MAPPING));
-                res.add(JavaType.get(REQUEST_MAPPING));
-                res.add(JavaType.get(REST_CONTROLLER));
+                Collections.addAll(res,
+                        String.format(SERVICE_FORMAT,classInfo.getPackageName(),classInfo.getModelName()),
+                        JavaType.get(PAGINATE), JavaType.get(AUTOWIRED), JavaType.get(POST_MAPPING),
+                        JavaType.get(REQUEST_MAPPING), JavaType.get(REST_CONTROLLER)
+                        );
                 break;
             default:
         }
         return res;
+    }
+
+    private <E> void add(Collection<E> c, E ... o) {
+        Collections.addAll(c, o);
     }
 
     private void exec(String tableName, String template, String outputPath) {
@@ -171,7 +181,7 @@ public class GenerateServiceImpl implements GenerateService {
     private String createDir(String template) {
         String path = DIR_TYPE.get(Template.MAPPER).equals(template) ? "%s\\src\\main\\resources\\orm" : "%s\\src\\main\\java\\%s\\%s";
         String packagePath = this.config.getPackageName().replace(".", "\\");
-        File filePath = new File(String.format(path, System.getProperty("user.dir"), packagePath, template));
+        File filePath = new File(String.format(path, USER_DIR, packagePath, template));
         if (!filePath.exists()) {
             System.out.println(filePath.getPath() + " directory is not exists, create directory ...");
             filePath.mkdirs();

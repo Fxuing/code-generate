@@ -1,8 +1,5 @@
 package [(${classInfo.packageName})].mapper;
 
-import com.obanks.common.Paginate;
-import org.springframework.stereotype.Repository;
-import java.util.List;
 [# th:each="import : ${imports}"]
 import [(${import})];
 [/]
@@ -21,6 +18,7 @@ public interface [(${classInfo.modelName})]Mapper{
      * @param [(${classInfo.modelNameLower})]
      * @Author: code-generate
      * @Date: [(${classInfo.time})]
+     * @return id
      */
     Long insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]);
     [/]
@@ -51,6 +49,7 @@ public interface [(${classInfo.modelName})]Mapper{
      * @param paginate
      * @Author: code-generate
      * @Date: [(${classInfo.time})]
+     * @return 总记录数
      */
     Long count(Paginate paginate);
 
@@ -60,6 +59,7 @@ public interface [(${classInfo.modelName})]Mapper{
      * @param paginate
      * @Author: code-generate
      * @Date: [(${classInfo.time})]
+     * @return data
      */
     List<[(${classInfo.modelName})]> search(Paginate paginate);
     [/]

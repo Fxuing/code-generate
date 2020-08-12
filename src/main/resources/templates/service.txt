@@ -1,8 +1,4 @@
 package [(${classInfo.packageName})].service;
-
-import com.obanks.common.Paginate;
-
-import java.util.List;
 [# th:each="import : ${imports}"]
 import [(${import})];
 [/]
@@ -14,15 +10,45 @@ import [(${import})];
  */
 public interface [(${classInfo.modelName})]Service{
     [# th:if="${classInfo.insert}"]
+    /**
+     * 新增
+     *
+     * @param [(${classInfo.modelNameLower})]
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     * @return id
+     */
     Long insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]);
     [/]
     [# th:if="${classInfo.update}"]
+    /**
+     * 修改
+     *
+     * @param [(${classInfo.modelNameLower})]
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     */
     void update([(${classInfo.modelName})] [(${classInfo.modelNameLower})]);
     [/]
     [# th:if="${classInfo.delete}"]
+    /**
+     * 删除
+     *
+     * @param id
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     */
     void delete(Long id);
     [/]
     [# th:if="${classInfo.select}"]
+    /**
+     * 分页查询
+     *
+     * @param paginate
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     * @return paginate
+     */
     Paginate search(Paginate paginate);
     [/]
 }

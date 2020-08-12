@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.core.env.Environment;
 
 import java.sql.SQLException;
 
@@ -37,11 +36,11 @@ public class CodeGenerateApplication implements CommandLineRunner  {
     @Override
     public void run(String... args) throws Exception {
         GenerateConfig config = new GenerateConfig();
-        config.setTableName("sms_sending_record");
-        config.setOutputPath("F:/data/generate/");
-        config.setUrl("jdbc:mysql://192.168.50.31:3306/fop_new_data?useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true");
-        config.setUsername("fop_new_logic");
-        config.setPassword("Jhjf@123");
+        config.setTableName("banners");
+        //config.setOutputPath("F:/data/generate/");
+        //config.setUrl("jdbc:mysql://192.168.50.31:3306/fop_new_data?useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true");
+        //config.setUsername("fop_new_logic");
+        //config.setPassword("Jhjf@123");
         config.setOperType(OperType.CDUR);
         config.setPackageName("com.fxuing.codegenerate.test");
         CodeGenerate codeGenerate = CodeGenerate.getInstance(config);
