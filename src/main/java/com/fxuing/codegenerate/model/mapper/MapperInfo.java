@@ -17,6 +17,7 @@ import java.util.List;
 public class MapperInfo extends BaseOper {
     private String tableName;
     private String namespace;
+    private String modelName;
     private List<PropertiesInfo> propertiesInfos;
 
     public MapperInfo(OperType operType) {

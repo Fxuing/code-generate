@@ -3,6 +3,9 @@ package [(${classInfo.packageName})].service;
 import com.obanks.common.Paginate;
 
 import java.util.List;
+[# th:each="import : ${imports}"]
+import [(${import})];
+[/]
 
 /**
  * @Author: code-generate

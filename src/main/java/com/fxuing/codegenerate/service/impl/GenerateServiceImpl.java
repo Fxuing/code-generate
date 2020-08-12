@@ -1,6 +1,7 @@
 package com.fxuing.codegenerate.service.impl;
 
 import com.fxuing.codegenerate.constant.JavaType;
+import com.fxuing.codegenerate.constant.OperType;
 import com.fxuing.codegenerate.constant.Sql;
 import com.fxuing.codegenerate.constant.Template;
 import com.fxuing.codegenerate.core.config.GenerateConfig;
@@ -19,6 +20,8 @@ import org.thymeleaf.context.Context;
 import java.io.File;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.fxuing.codegenerate.constant.JavaType.*;
 
 /**
  * @Author: Hou_fx
@@ -67,14 +70,14 @@ public class GenerateServiceImpl implements GenerateService {
         tableInfo.setTableName(tableName);
         String modelName = StringSimpleUtil.underlineToHump(tableName);
         tableInfo.setModelName(modelName.substring(0, 1).toUpperCase() + modelName.substring(1));
-        tableInfo.setPackageName(this.config.getPackageName() + ".entity" );
+        tableInfo.setPackageName(this.config.getPackageName() + ".entity");
         List<TableDetail> tableDetail = jdbcTemplate.query(String.format(Sql.QUERY_TABLE_DETAIL, tableName), (resultSet, i) -> TableDetail.getInstance(resultSet));
         List<TableInfo.Field> fieldList = new ArrayList<>();
         tableDetail.forEach(f -> fieldList.add(TableInfo.Field.getInstance(f)));
         tableInfo.setFieldList(fieldList);
         Map<String, Object> param = new HashMap<>(16);
         param.put(TABLE, tableInfo);
-        param.put(IMPORTS, importsPackage(param));
+        param.put(IMPORTS, importsPackage(param, Template.MODEL));
         Context context = new Context(Locale.CHINA);
         context.setVariables(param);
         TemplateUtil.process(Template.MODEL, context, createDir(DIR_TYPE.get(Template.MODEL)) + tableInfo.getModelName() + FILE_TYPE.get(Template.MODEL));
@@ -102,6 +105,7 @@ public class GenerateServiceImpl implements GenerateService {
         context.setVariables(param);
         modelName = modelName.substring(0, 1).toUpperCase() + modelName.substring(1);
         mapperInfo.setNamespace(this.config.getPackageName() + ".mapper." + modelName + "Mapper");
+        mapperInfo.setModelName(this.config.getPackageName() + ".entity." + modelName);
         TemplateUtil.process(Template.MAPPER, context, createDir(DIR_TYPE.get(Template.MAPPER)) + modelName + FILE_TYPE.get(Template.MAPPER));
     }
 
@@ -120,10 +124,36 @@ public class GenerateServiceImpl implements GenerateService {
         this.exec(tableName, Template.CONTROLLER, createDir(DIR_TYPE.get(Template.CONTROLLER)));
     }
 
-    private Set<String> importsPackage(Map<String,Object> param){
+    private Set<String> importsPackage(Map<String, Object> param, String template) {
         Set<String> res = new HashSet<>();
-        TableInfo tableInfo = (TableInfo) Optional.ofNullable(param.get(TABLE)).orElse(new TableInfo());
-        Optional.ofNullable(tableInfo.getFieldList()).ifPresent(p -> p.forEach(f -> Optional.ofNullable(JavaType.get(f.getJavaType())).ifPresent(res::add)));
+        ClassInfo classInfo = (ClassInfo) Optional.ofNullable(param.get(CLASS_INFO)).orElse(new ClassInfo(OperType.CDUR));
+        Optional.ofNullable(classInfo.getJavaType()).ifPresent(res::addAll);
+        switch (template) {
+            case Template.MODEL:
+                TableInfo tableInfo = (TableInfo) Optional.ofNullable(param.get(TABLE)).orElse(new TableInfo());
+                Optional.ofNullable(tableInfo.getFieldList()).ifPresent(p -> p.forEach(f -> Optional.ofNullable(JavaType.get(f.getJavaType())).ifPresent(res::add)));
+                break;
+            //case Template.DAO:
+            //case Template.SERVICE:
+            case Template.SERVICE_IMPL:
+                res.add(classInfo.getPackageName() + ".mapper." + classInfo.getModelName() + "Mapper");
+                res.add(classInfo.getPackageName() + ".service." + classInfo.getModelName() + "Service");
+                res.add(JavaType.get(AUTOWIRED));
+                res.add(JavaType.get(PAGINATE));
+                res.add(JavaType.get(SERVICE));
+                res.add(JavaType.get(PROPAGATION));
+                res.add(JavaType.get(TRANSACTIONAL));
+                break;
+            case Template.CONTROLLER:
+                res.add(classInfo.getPackageName() + ".service." + classInfo.getModelName() + "Service");
+                res.add(JavaType.get(PAGINATE));
+                res.add(JavaType.get(AUTOWIRED));
+                res.add(JavaType.get(POST_MAPPING));
+                res.add(JavaType.get(REQUEST_MAPPING));
+                res.add(JavaType.get(REST_CONTROLLER));
+                break;
+            default:
+        }
         return res;
     }
 
@@ -132,6 +162,7 @@ public class GenerateServiceImpl implements GenerateService {
         modelName = modelName.substring(0, 1).toUpperCase() + modelName.substring(1);
         Map<String, Object> param = new HashMap<>(16);
         param.put(CLASS_INFO, ClassInfo.getInstance(this.config.getOperType(), modelName, this.config.getPackageName()));
+        param.put(IMPORTS, importsPackage(param, template));
         Context context = new Context(Locale.CHINA);
         context.setVariables(param);
         TemplateUtil.process(template, context, outputPath + modelName + FILE_TYPE.get(template));

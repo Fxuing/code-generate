@@ -2,8 +2,10 @@ package [(${classInfo.packageName})].mapper;
 
 import com.obanks.common.Paginate;
 import org.springframework.stereotype.Repository;
-
 import java.util.List;
+[# th:each="import : ${imports}"]
+import [(${import})];
+[/]
 
 /**
  * @Author: code-generate
@@ -13,17 +15,52 @@ import java.util.List;
 @Repository
 public interface [(${classInfo.modelName})]Mapper{
     [# th:if="${classInfo.insert}"]
+    /**
+     * 新增
+     *
+     * @param [(${classInfo.modelNameLower})]
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     */
     Long insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]);
     [/]
     [# th:if="${classInfo.update}"]
+    /**
+     * 修改
+     *
+     * @param [(${classInfo.modelNameLower})]
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     */
     void update([(${classInfo.modelName})] [(${classInfo.modelNameLower})]);
     [/]
     [# th:if="${classInfo.delete}"]
+    /**
+     * 删除
+     *
+     * @param id
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     */
     void delete(Long id);
     [/]
     [# th:if="${classInfo.select}"]
+    /**
+     * 查询记录条数
+     *
+     * @param paginate
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     */
     Long count(Paginate paginate);
 
+    /**
+     * 查询记录数据
+     *
+     * @param paginate
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     */
     List<[(${classInfo.modelName})]> search(Paginate paginate);
     [/]
 }

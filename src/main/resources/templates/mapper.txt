@@ -34,7 +34,7 @@
     	SELECT COUNT(1) FROM [(${mapper.tableName})]
     </select>
 
-    <select id = "search" resultType="mapper.namespace">
+    <select id = "search" resultType="[(${mapper.modelName})]">
     	SELECT [# th:each="properties,iterStat : ${mapper.propertiesInfos}"]
     		[(${properties.columns})] as [(${properties.properties})][# th:if="${iterStat.last ne true}"],[/]
     	[/] FROM [(${mapper.tableName})] LIMIT #{startNum},#{recordsPerPage}

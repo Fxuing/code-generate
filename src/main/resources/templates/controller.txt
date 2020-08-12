@@ -1,8 +1,16 @@
 package [(${classInfo.packageName})].controller;
 
+[# th:each="import : ${imports}"]
+import [(${import})];
+[/]
 
+/**
+ * @Author: code-generate
+ * @Date: [(${classInfo.time})]
+ * @Description:
+ */
 @RestController
-@RequestMapping("[(${classInfo.packageName})]")
+@RequestMapping("[(${classInfo.modelNameLower})]")
 public class [(${classInfo.modelName})]Controller{
 	@Autowired
 	[(${classInfo.modelName})]Service [(${classInfo.modelNameLower})]Service;
@@ -20,13 +28,14 @@ public class [(${classInfo.modelName})]Controller{
 	}
 
 	@PostMapping("delete")
-	public Object delete([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
-		[(${classInfo.modelNameLower})]Service.delete([(${classInfo.modelNameLower})]);
+	public Object delete(Long id){
+		[(${classInfo.modelNameLower})]Service.delete(id);
 		return "OK";
 	}
 
 	@PostMapping("search")
 	public Object search([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
-		return [(${classInfo.modelNameLower})]Service.search([(${classInfo.modelNameLower})]);
+	    Paginate paginate = new Paginate();
+		return [(${classInfo.modelNameLower})]Service.search(paginate);
 	}
 }

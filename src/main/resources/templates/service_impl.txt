@@ -1,13 +1,17 @@
 package [(${classInfo.packageName})].service.impl;
 
+[# th:each="import : ${imports}"]
+import [(${import})];
+[/]
 
 /**
  * @Author: code-generate
  * @Date: [(${classInfo.time})]
  * @Description:
  */
-public class [(${classInfo.modelName})]Impl implements [(${classInfo.modelName})]Service{
-	@AutoWired
+@Service
+public class [(${classInfo.modelName})]ServiceImpl implements [(${classInfo.modelName})]Service{
+	@Autowired
 	[(${classInfo.modelName})]Mapper [(${classInfo.modelNameLower})]Mapper;
 
 	@Override
