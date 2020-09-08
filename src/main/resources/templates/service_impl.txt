@@ -1,0 +1,44 @@
+package [(${classInfo.packageName})].service.impl;
+
+[# th:each="import : ${imports}"]
+import [(${import})];
+[/]
+
+/**
+ * @Author: code-generate
+ * @Date: [(${classInfo.time})]
+ * @Description:
+ */
+@Service
+public class [(${classInfo.modelName})]ServiceImpl implements [(${classInfo.modelName})]Service{
+	@Autowired
+	[(${classInfo.modelName})]Mapper [(${classInfo.modelNameLower})]Mapper;
+    [# th:if="${classInfo.insert}"]
+	@Override
+	@Transactional(propagation = Propagation.REQUIRED, rollbackFor = Exception.class)
+	public Long insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		return [(${classInfo.modelNameLower})]Mapper.insert([(${classInfo.modelNameLower})]);
+	}[/]
+    [# th:if="${classInfo.update}"]
+	@Override
+	public void update([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		[(${classInfo.modelNameLower})]Mapper.update([(${classInfo.modelNameLower})]);
+	}[/]
+    [# th:if="${classInfo.delete}"]
+	@Override
+	public void delete(Long id){
+		[(${classInfo.modelNameLower})]Mapper.delete(id);
+	} [/]
+    [# th:if="${classInfo.select}"]
+	@Override
+	public Paginate search(Paginate paginate){
+		Long count = [(${classInfo.modelNameLower})]Mapper.count(paginate);
+		if (count == 0){
+			return paginate;
+		}
+		paginate.setTotal(count);
+		paginate.setData([(${classInfo.modelNameLower})]Mapper.search(paginate));
+		return paginate;
+	}
+	[/]
+}

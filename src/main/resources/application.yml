@@ -1,0 +1,19 @@
+server:
+  port: 7788
+spring:
+  datasource:
+    username: root
+    url: jdbc:mysql://192.168.50.31:3306/boc_data?useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    password: Jhjf@2017
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    tomcat.max-wait: 10000
+    tomcat.max-active: 30
+    tomcat.test-on-borrow: true
+    tomcat.validation-query: SELECT 1
+    tomcat.validation-interval: 30000
+mybatis:
+  mapper-locations: classpath*:/orm/*.xml
+
+logging:
+  level:
+    com.obanks: debug

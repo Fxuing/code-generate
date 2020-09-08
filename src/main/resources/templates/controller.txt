@@ -1,0 +1,72 @@
+package [(${classInfo.packageName})].controller;
+
+[# th:each="import : ${imports}"]
+import [(${import})];
+[/]
+
+/**
+ * @Author: code-generate
+ * @Date: [(${classInfo.time})]
+ * @Description:
+ */
+@RestController
+@RequestMapping("[(${classInfo.modelNameLower})]")
+public class [(${classInfo.modelName})]Controller{
+	@Autowired
+	[(${classInfo.modelName})]Service [(${classInfo.modelNameLower})]Service;
+    [# th:if="${classInfo.insert}"]
+    /**
+     * 新增
+     *
+     * @param [(${classInfo.modelNameLower})]
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     * @return id
+     */
+	@PostMapping("insert")
+	public Result insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		[(${classInfo.modelNameLower})]Service.insert([(${classInfo.modelNameLower})]);
+		return Result.success();
+	}[/]
+    [# th:if="${classInfo.update}"]
+    /**
+     * 修改
+     *
+     * @param [(${classInfo.modelNameLower})]
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     */
+	@PostMapping("update")
+	public Result update([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+		[(${classInfo.modelNameLower})]Service.update([(${classInfo.modelNameLower})]);
+		return Result.success();
+	}[/]
+    [# th:if="${classInfo.delete}"]
+    /**
+     * 删除
+     *
+     * @param id
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     */
+	@PostMapping("delete")
+	public Result delete(Long id){
+		[(${classInfo.modelNameLower})]Service.delete(id);
+		return Result.success();
+	}[/]
+    [# th:if="${classInfo.select}"]
+    /**
+     * 分页查询
+     *
+     * @param [(${classInfo.modelNameLower})]
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     * @return paginate
+     */
+	@PostMapping("search")
+	public Result<Paginate<[(${classInfo.modelName})]>> search([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
+	    Paginate<[(${classInfo.modelName})]> paginate = new Paginate<>();
+		return Result.success([(${classInfo.modelNameLower})]Service.search(paginate));
+	}
+	[/]
+}

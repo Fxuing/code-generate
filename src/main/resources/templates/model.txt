@@ -1,0 +1,21 @@
+package [(${table.packageName})];
+
+import lombok.Data;
+[# th:each="import : ${imports}"]
+import [(${import})];
+[/]
+
+/**
+ * @Author: code-generate
+ * @Date: [(${table.time})]
+ * @Description:
+ */
+@Data
+public class [(${table.modelName})] implements Serializable {
+
+   private static final long serialVersionUID = 1L;
+   [# th:each="field : ${table.fieldList}"]
+   /** [(${field.comment})] */
+   private [(${field.javaType})] [(${field.camelName})];
+   [/]
+}
