@@ -12,4 +12,5 @@ public class Template {
     public static final String SERVICE = "service.txt";
     public static final String SERVICE_IMPL = "service_impl.txt";
     public static final String CONTROLLER = "controller.txt";
+    public static final String SQL = "sql.txt";
 }

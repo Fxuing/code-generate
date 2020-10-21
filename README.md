@@ -1,25 +1,24 @@
 ### code-generate
 
-  code-generate 是快速基础增删改查代码，使用 `thymeleaf` 作为模板生成 
+  code-generate 可以快速生成基础增删改查代码，使用 `thymeleaf` 作为模板引擎。 
 
 #### 项目结构
 
 ```
 ├── java
 │   └── com
-│   └── 9h
-│   └── codegenerate
-│   ├── constant 
-│   ├── core 
-│   │   └── config 
-│   ├── model 
-│   │   └── mapper
-│   ├── service
-│   │   └── impl
-│   └── utils
+│       └── fxuing
+│           └── codegenerate
+│               ├── constant
+│               ├── core
+│               │   └── config
+│               ├── model
+│               │   └── mapper
+│               ├── service
+│               │   └── impl
+│               └── utils
 └── resources
- ├── orm
- └── templates
+    └── templates
 ```
 
 
@@ -27,12 +26,19 @@
 #### demo
 
 ```java
-GenerateConfig config = new GenerateConfig();
-config.setTableName("banners");
-config.setOperType(OperType.CDUR);
-config.setPackageName("com.9h.codegenerate.test");
-CodeGenerate codeGenerate = CodeGenerate.getInstance(config);
-codeGenerate.config(config).entity().dao().service().controller();
+public static void main(String[] args) throws SQLException {
+    GenerateConfig config = GenerateConfig.getInstance();
+    config.setUrl("jdbc:mysql://127.0.0.1:3306/fop_new_data?useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true");
+    config.setUsername("db_username");
+    config.setPassword("db_password");
+    config.setTables("third_part_login");
+    config.setOperType(OperType.CDUR);
+    config.setPackageName("com.fxuing.codegenerate.abcde");
+    config.setOutputType(GenerateConfig.FILE);
+    config.setGenerateType(GenerateConfig.MYBATIS_PLUS);
+    CodeGenerate codeGenerate = CodeGenerate.getInstance(config);
+    codeGenerate.config(config).entity().dao().service();
+}
 ```
 
 #### 主要思路
@@ -49,4 +55,16 @@ codeGenerate.config(config).entity().dao().service().controller();
 
 #### 需要注意的地方
 
-如在当前项目使用的话，依赖spring，如单独使用，需要配置 数据库信息，生成代码后，可能需要刷新一下目录才可以看到。
+生成代码后，可能需要刷新一下目录才可以看到。
+
+##### 其他项目使用
+
+下载源码， install 到本地仓库
+
+```xml
+<dependency>
+    <groupId>com.fxuing</groupId>
+    <artifactId>code-generate</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+</dependency>
+```

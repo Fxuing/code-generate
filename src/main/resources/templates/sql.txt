@@ -1,0 +1,6 @@
+CREATE TABLE `[(${tableName})]` (
+    [# th:each="sqlInfo : ${sqlInfos}"]
+  `[(${sqlInfo.columnsName})]` [(${sqlInfo.type})][# th:if="${sqlInfo.length!=null}"]([(${sqlInfo.length})])[/] [# th:if="${sqlInfo.notEmpty}"]NOT[/] NULL [# th:if="${sqlInfo.autoIncrement}"] AUTO_INCREMENT[/] [# th:if="${sqlInfo.comment!=null}"]COMMENT '[(${sqlInfo.comment})]'[/],
+  [/]
+  PRIMARY KEY ([# th:each="primary,iterStat : ${primaryList}"]`[(${primary})]`[# th:if="${iterStat.last ne true}"],[/][/])
+);

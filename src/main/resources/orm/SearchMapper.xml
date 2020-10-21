@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fxuing.codegenerate.mapper.SearchMapper">
+    <select id="tablesCount" resultType="java.lang.Long">
+        SELECT count(1) FROM information_schema.tables
+        WHERE table_schema = DATABASE()
+        <if test="condition != null and condition != ''">
+            and (table_name like concat('%',#{condition},'%') or table_comment like concat('%',#{condition},'%'))
+        </if>
+    </select>
+    <select id="tablesData" resultType="com.fxuing.codegenerate.dto.Tables">
+        SELECT table_name as Name,Engine,Version,Row_format,table_rows,Avg_row_length,
+        Data_length,Max_data_length,Index_length,Data_free,Auto_increment,
+        Create_time,Update_time,Check_time,table_collation,Checksum,
+        Create_options,table_comment as Comment FROM information_schema.tables
+        WHERE table_schema = DATABASE()
+        <if test="condition != null and condition != ''">
+            and (table_name like concat('%',#{condition},'%') or table_comment like concat('%',#{condition},'%'))
+        </if>
+        LIMIT #{startNum},#{recordsPerPage}
+    </select>
+</mapper>

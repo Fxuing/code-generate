@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="[(${mapper.namespace})]">
+[# th:if="${generateType eq 'Mybatis'}"]
     [# th:if="${mapper.insert}"]
     <insert id="insert" useGeneratedKeys="true" keyProperty="id" keyColumn="id">
         INSERT INTO [(${mapper.tableName})]
@@ -11,6 +12,18 @@
         ([# th:each="properties,iterStat : ${mapper.propertiesInfos}"]
             #{[(${properties.properties})]}[# th:if="${iterStat.last ne true}"],[/]
         [/])
+    </insert>
+    <insert id="batchInsert">
+        INSERT INTO [(${mapper.tableName})]
+        ([# th:each="propertiesInfos,iterStat : ${mapper.propertiesInfos}"]
+            [(${propertiesInfos.columns})][# th:if="${iterStat.last ne true}"],[/]
+        [/])
+        VALUES
+        <foreach collection="[(${paramName})]List" item="data" separator=",">
+        ([# th:each="properties,iterStat : ${mapper.propertiesInfos}"]
+            #{data.[(${properties.properties})]}[# th:if="${iterStat.last ne true}"],[/]
+        [/])
+        </foreach>
     </insert>
     [/]
     [# th:if="${mapper.update}"]
@@ -40,4 +53,5 @@
     	[/] FROM [(${mapper.tableName})] LIMIT #{startNum},#{recordsPerPage}
     </select>
     [/]
+[/]
 </mapper>

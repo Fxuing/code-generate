@@ -5,38 +5,15 @@ import [(${import})];
 [/]
 
 /**
- * @Author: code-generate
- * @Date: [(${classInfo.time})]
- * @Description:
+ * @author: code-generate
+ * @date: [(${classInfo.time})]
+ * @description:
  */
 @RestController
 @RequestMapping("[(${classInfo.modelNameLower})]")
 public class [(${classInfo.modelName})]Controller{
 	@Autowired
 	[(${classInfo.modelName})]Service [(${classInfo.modelNameLower})]Service;
-    [# th:if="${classInfo.insert}"]
-	@PostMapping("insert")
-	public Object insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
-		[(${classInfo.modelNameLower})]Service.insert([(${classInfo.modelNameLower})]);
-		return "OK";
-	}[/]
-    [# th:if="${classInfo.update}"]
-	@PostMapping("update")
-	public Object update([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
-		[(${classInfo.modelNameLower})]Service.update([(${classInfo.modelNameLower})]);
-		return "OK";
-	}[/]
-    [# th:if="${classInfo.delete}"]
-	@PostMapping("delete")
-	public Object delete(Long id){
-		[(${classInfo.modelNameLower})]Service.delete(id);
-		return "OK";
-	}[/]
-    [# th:if="${classInfo.select}"]
-	@PostMapping("search")
-	public Object search([(${classInfo.modelName})] [(${classInfo.modelNameLower})]){
-	    Paginate paginate = new Paginate();
-		return [(${classInfo.modelNameLower})]Service.search(paginate);
-	}
-	[/]
+
+
 }

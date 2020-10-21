@@ -2,9 +2,9 @@ server:
   port: 7788
 spring:
   datasource:
-    username: fop_new_logic
-    url: jdbc:mysql://192.168.50.31:3306/fop_new_data?useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
-    password: Jhjf@123
+    username: root
+    url: jdbc:mysql://192.168.50.31:3306/boc_data?useUnicode=true&characterEncoding=UTF-8&useLegacyDatetimeCode=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    password: Jhjf@2017
     driver-class-name: com.mysql.cj.jdbc.Driver
     tomcat.max-wait: 10000
     tomcat.max-active: 30
@@ -16,4 +16,4 @@ mybatis:
 
 logging:
   level:
-    com.fxuing: debug
+    com.obanks: debug

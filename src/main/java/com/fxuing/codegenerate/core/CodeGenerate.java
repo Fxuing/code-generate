@@ -2,7 +2,9 @@ package com.fxuing.codegenerate.core;
 
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
+import com.fxuing.codegenerate.constant.Sql;
 import com.fxuing.codegenerate.core.config.GenerateConfig;
+import com.fxuing.codegenerate.model.SqlInfo;
 import com.fxuing.codegenerate.service.GenerateService;
 import com.fxuing.codegenerate.service.impl.GenerateServiceImpl;
 import com.zaxxer.hikari.HikariConfig;
@@ -13,6 +15,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @Author: Hou_fx
@@ -22,18 +28,20 @@ import java.sql.SQLException;
 @Component
 @Data
 public class CodeGenerate {
-    private static GenerateService generateService ;
+    private static GenerateService generateService;
     private static GenerateConfig config;
     private static volatile CodeGenerate SINGLETON;
+
     @Autowired
-    private void setGenerateService(GenerateService generateService){
+    private void setGenerateService(GenerateService generateService) {
         CodeGenerate.generateService = generateService;
     }
-    public static CodeGenerate getInstance(GenerateConfig config){
+
+    public static CodeGenerate getInstance(GenerateConfig config) {
         CodeGenerate.config = config;
-        if(SINGLETON == null){
-            synchronized(CodeGenerate.class){
-                if(SINGLETON == null){
+        if (SINGLETON == null) {
+            synchronized (CodeGenerate.class) {
+                if (SINGLETON == null) {
                     SINGLETON = new CodeGenerate();
                 }
             }
@@ -41,7 +49,8 @@ public class CodeGenerate {
         return SINGLETON;
     }
 
-    private CodeGenerate(){}
+    private CodeGenerate() {
+    }
 
     public CodeGenerate config(GenerateConfig config) {
         if (generateService == null) {
@@ -54,38 +63,62 @@ public class CodeGenerate {
             config.setJdbcTemplate(jdbcTemplate);
         }
         generateService.setConfig(config);
+        for (String table : config.getTable()) {
+            checkTableIsExist(table);
+        }
         return this;
     }
-   /* private String username(){
-        StandardServletEnvironment environment = new StandardServletEnvironment();
-        environment.initPropertySources(null, null);
-        String username = environment.getProperty("spring.datasource.username");
-        return username ;
-    }*/
 
-    private Config apolloConfig(){
+    private void checkTableIsExist(String table){
+        List<String> tables = generateService.getConfig().getJdbcTemplate().queryForList(Sql.SHOW_TABLES, String.class);
+        tables = tables.stream().map(String::toLowerCase).collect(Collectors.toList());
+        if (!tables.contains(table)) {
+            throw new RuntimeException(String.format("Table '%s' doesn't exist", table));
+        }
+    }
+
+
+    private Config apolloConfig() {
         return ConfigService.getAppConfig();
     }
 
     public CodeGenerate entity() throws SQLException {
-        generateService.generateModel(config.getTableName());
+        for (String table : config.getTable()) {
+            generateService.generateModel(table);
+        }
         return this;
     }
 
     public CodeGenerate dao() throws SQLException {
-        generateService.generateDao(config.getTableName());
-        generateService.generateMapper(config.getTableName());
+        for (String table : config.getTable()) {
+            generateService.generateDao(table);
+            generateService.generateMapper(table);
+        }
         return this;
     }
 
     public CodeGenerate service() {
-        generateService.generateService(config.getTableName());
-        generateService.generateServiceImpl(config.getTableName());
+        for (String table : config.getTable()) {
+            generateService.generateService(table);
+            generateService.generateServiceImpl(table);
+        }
         return this;
     }
 
     public CodeGenerate controller() {
-        generateService.generateController(config.getTableName());
+        for (String table : config.getTable()) {
+            generateService.generateController(table);
+        }
+        return this;
+    }
+
+    public CodeGenerate sql(){
+        List<SqlInfo> sqlInfoList = new ArrayList<>();
+        SqlInfo id = SqlInfo.builder().autoIncrement(true).length(18).columnsName("id").comment("id").notEmpty(true).type("bigint").primary(true).build();
+        SqlInfo name = SqlInfo.builder().autoIncrement(false).columnsName("name").comment("姓名").type("varchar").notEmpty(false).length(255).primary(false).build();
+        SqlInfo age = SqlInfo.builder().autoIncrement(false).columnsName("age").comment("年龄").type("int").primary(false).notEmpty(false).length(11).build();
+        Collections.addAll(sqlInfoList, id, name, age);
+        generateService.generateSqlScript(sqlInfoList,"test_age");
         return this;
     }
 }

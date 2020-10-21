@@ -38,6 +38,7 @@ public class TableInfo {
             TYPE_MAPPER.put("decimal", "BigDecimal");
             TYPE_MAPPER.put("datetime", "LocalDateTime");
             TYPE_MAPPER.put("timestamp", "LocalDateTime");
+            TYPE_MAPPER.put("date", "LocalDateTime");
         }
 
         private String name;

@@ -4,10 +4,16 @@ import [(${import})];
 [/]
 
 /**
- * @Author: code-generate
- * @Date: [(${classInfo.time})]
- * @Description:
+ * @author: code-generate
+ * @date: [(${classInfo.time})]
+ * @description:
  */
+[# th:if="${generateType eq 'Mybatis-plus'}"]
+public interface [(${classInfo.modelName})]Service extends IService<[(${classInfo.modelName})]> {
+
+}
+[/]
+[# th:if="${generateType eq 'Mybatis'}"]
 public interface [(${classInfo.modelName})]Service{
     [# th:if="${classInfo.insert}"]
     /**
@@ -52,3 +58,4 @@ public interface [(${classInfo.modelName})]Service{
     Paginate search(Paginate paginate);
     [/]
 }
+[/]

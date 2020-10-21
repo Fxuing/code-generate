@@ -5,11 +5,17 @@ import [(${import})];
 [/]
 
 /**
- * @Author: code-generate
- * @Date: [(${classInfo.time})]
- * @Description:
+ * @author: code-generate
+ * @date: [(${classInfo.time})]
+ * @description:
  */
 @Repository
+[# th:if="${generateType eq 'Mybatis-plus'}"]
+public interface [(${classInfo.modelName})]Mapper extends BaseMapper<[(${classInfo.modelName})]> {
+
+}
+[/]
+[# th:if="${generateType eq 'Mybatis'}"]
 public interface [(${classInfo.modelName})]Mapper{
     [# th:if="${classInfo.insert}"]
     /**
@@ -21,6 +27,15 @@ public interface [(${classInfo.modelName})]Mapper{
      * @return id
      */
     Long insert([(${classInfo.modelName})] [(${classInfo.modelNameLower})]);
+    /**
+     * 批量新增
+     *
+     * @param [(${classInfo.modelNameLower})]List
+     * @Author: code-generate
+     * @Date: [(${classInfo.time})]
+     * @return id
+     */
+    Long batchInsert(@Param("[(${classInfo.modelNameLower})]List") List<[(${classInfo.modelName})]> [(${classInfo.modelNameLower})]List);
     [/]
     [# th:if="${classInfo.update}"]
     /**
@@ -64,3 +79,4 @@ public interface [(${classInfo.modelName})]Mapper{
     List<[(${classInfo.modelName})]> search(Paginate paginate);
     [/]
 }
+[/]

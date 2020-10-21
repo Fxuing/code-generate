@@ -6,13 +6,14 @@ import [(${import})];
 [/]
 
 /**
- * @Author: code-generate
- * @Date: [(${table.time})]
- * @Description:
+ * @author: code-generate
+ * @date: [(${table.time})]
+ * @description:
  */
 @Data
-public class [(${table.modelName})] {
+public class [(${table.modelName})] implements Serializable {
 
+   private static final long serialVersionUID = 1L;
    [# th:each="field : ${table.fieldList}"]
    /** [(${field.comment})] */
    private [(${field.javaType})] [(${field.camelName})];

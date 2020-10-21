@@ -40,6 +40,7 @@ public class TemplateUtil {
         }
         return true;
     }
+
     public static void process(String freeTempName, Context context, Writer writer) {
         engine.process(freeTempName, context, writer);
     }

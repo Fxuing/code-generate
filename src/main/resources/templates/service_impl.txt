@@ -5,11 +5,19 @@ import [(${import})];
 [/]
 
 /**
- * @Author: code-generate
- * @Date: [(${classInfo.time})]
- * @Description:
+ * @author: code-generate
+ * @date: [(${classInfo.time})]
+ * @description:
  */
 @Service
+[# th:if="${generateType eq 'Mybatis-plus'}"]
+public class [(${classInfo.modelName})]ServiceImpl extends ServiceImpl<[(${classInfo.modelName})]Mapper, [(${classInfo.modelName})]> implements [(${classInfo.modelName})]Service{
+	@Autowired
+	[(${classInfo.modelName})]Mapper [(${classInfo.modelNameLower})]Mapper;
+
+}
+[/]
+[# th:if="${generateType eq 'Mybatis'}"]
 public class [(${classInfo.modelName})]ServiceImpl implements [(${classInfo.modelName})]Service{
 	@Autowired
 	[(${classInfo.modelName})]Mapper [(${classInfo.modelNameLower})]Mapper;
@@ -42,3 +50,4 @@ public class [(${classInfo.modelName})]ServiceImpl implements [(${classInfo.mode
 	}
 	[/]
 }
+[/]
