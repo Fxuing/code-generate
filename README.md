@@ -55,7 +55,7 @@ public static void main(String[] args) throws SQLException {
 
 #### 需要注意的地方
 
-生成代码后，可能需要刷新一下目录才可以看到。
+生成代码后， 可能需要刷新一下目录才可以看到。
 
 ##### 其他项目使用
 
